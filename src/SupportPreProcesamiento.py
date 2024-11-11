@@ -71,10 +71,10 @@ def exploracion_dataframe(dataframe, columna_control, estadisticos = False):
 def separarar_df(dataframe):
     return dataframe.select_dtypes(include=np.number), dataframe.select_dtypes(include="O")
 
-def plot_numericas(dataframe):
+def plot_numericas(dataframe,grafica_size = (15,10)):
     cols_numericas = dataframe.columns
     filas = math.ceil(len(cols_numericas)/2)
-    fig, axes = plt.subplots(nrows= filas,ncols=2,figsize = (15,10))
+    fig, axes = plt.subplots(nrows= filas,ncols=2,figsize = grafica_size)
     axes = axes.flat
 
     for i, col in enumerate(cols_numericas):
@@ -88,10 +88,10 @@ def plot_numericas(dataframe):
         pass
     plt.tight_layout()
 
-def plot_categoricas(dataframe, paleta="mako"):
+def plot_categoricas(dataframe, paleta="mako",grafica_size = (15,10)):
     cols_categoricas = dataframe.columns
     filas = math.ceil(len(cols_categoricas)/2)
-    fig, axes = plt.subplots(nrows= filas,ncols=2,figsize = (15,10))
+    fig, axes = plt.subplots(nrows= filas,ncols=2,figsize = grafica_size)
     axes = axes.flat
 
     for i, col in enumerate(cols_categoricas):
@@ -104,12 +104,13 @@ def plot_categoricas(dataframe, paleta="mako"):
         axes[i].set_title(f"{col}")
         axes[i].set_xlabel("")
         axes[i].tick_params(rotation=90)
-
+    
+    plt.tight_layout()
     if len(cols_categoricas) % 2 != 0:
         fig.delaxes(axes[-1])
     else:
         pass
-    plt.tight_layout()
+    
 
 def relacion_vr_categoricas(dataframe,variable_respuesta,paleta="mako",grafica_size = (15,10)):
     df_cat = separarar_df(dataframe)[1]
@@ -190,6 +191,10 @@ def detectar_outliers(dataframe,colorear="orange",grafica_size = (15,10)):
                     flierprops = {"markersize":5,"markerfacecolor":"red"})
         axes[indice].set_title(f"Outliers de {columna}")
         axes[indice].set_xlabel("")
+    if len(df_num.columns) % 2 != 0:
+        fig.delaxes(axes[-1])
+    else:
+        pass
 
     plt.tight_layout()
 
